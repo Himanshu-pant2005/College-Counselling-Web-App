@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="auth-container">
+  <div class="auth-card">
+    <div class="text-center">
+      <h1 class="text-3xl font-extrabold text-gray-900">Sign in</h1>
+      <p class="mt-2 text-sm text-gray-600">Or <a href="{% url 'register' %}" class="font-medium text-indigo-600 hover:text-indigo-500">create an account</a></p>
+    </div>
+    
+    {% if messages %}
+    <div class="rounded-md bg-red-50 p-4">
+      <div class="flex">
+        <div class="ml-3">
+          <h3 class="text-sm font-medium text-red-800">Error</h3>
+          <div class="mt-2 text-sm text-red-700">
+            <ul class="list-disc pl-5 space-y-1">
+              {% for message in messages %}
+                <li>{{ message }}</li>
+              {% endfor %}
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endif %}
+    
+    <form class="mt-8 space-y-6" method="POST">
+      {% csrf_token %}
+      <div class="rounded-md shadow-sm -space-y-px">
+        <div>
+          <label for="id_username" class="sr-only">Email address</label>
+          <input id="id_username" name="username" type="email" autocomplete="email" required class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm" placeholder="Email address">
+        </div>
+        <div>
+          <label for="id_password" class="sr-only">Password</label>
+          <input id="id_password" name="password" type="password" autocomplete="current-password" required class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm" placeholder="Password">
+        </div>
+      </div>
+
+      <div class="flex items-center justify-between">
+        <div class="flex items-center">
+          <input id="remember_me" name="remember_me" type="checkbox" class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded">
+          <label for="remember_me" class="ml-2 block text-sm text-gray-900">
+            Remember me
+          </label>
+        </div>
+
+        <div class="text-sm">
+          <a href="{% url 'password_reset' %}" class="font-medium text-indigo-600 hover:text-indigo-500">
+            Forgot your password?
+          </a>
+        </div>
+      </div>
+
+      <div>
+        <button type="submit" class="auth-button w-full py-2 px-4 text-sm font-medium rounded-md">
+          Sign in
+        </button>
+      </div>
+    </form>
+    
+    <div class="mt-6">
+      <div class="relative">
+        <div class="absolute inset-0 flex items-center">
+          <div class="w-full border-t border-gray-300"></div>
+        </div>
+        <div class="relative flex justify-center text-sm">
+          <span class="px-2 bg-white text-gray-500">
+            Or continue with
+          </span>
+        </div>
+      </div>
+
+      <div class="mt-6">
+        <a href="{% url 'social:begin' 'google-oauth2' %}" class="google-button w-full inline-flex justify-center py-2 px-4 rounded-md text-sm font-medium">
+          <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M12.545,10.239v3.821h5.445c-0.712,2.315-2.647,3.972-5.445,3.972c-3.332,0-6.033-2.701-6.033-6.032s2.701-6.032,6.033-6.032c1.498,0,2.866,0.549,3.921,1.453l2.814-2.814C17.503,2.988,15.139,2,12.545,2C7.021,2,2.543,6.477,2.543,12s4.478,10,10.002,10c8.396,0,10.249-7.85,9.426-11.748L12.545,10.239z"/>
+          </svg>
+          <span class="ml-2">Sign in with Google</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
