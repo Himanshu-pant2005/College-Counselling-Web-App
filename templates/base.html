@@ -20,7 +20,7 @@
                     {% if user.is_staff %}
                         <a href="{% url 'admin_dashboard' %}" class="hover:text-blue-200">Admin Dashboard</a>
                     {% else %}
-                        <a href="{% url 'dashboard' %}" class="hover:text-blue-200">Dashboard</a>
+                        <a href="{% url 'home' %}" class="bg-blue-700 hover:bg-blue-800 px-4 py-2 rounded-md">Profile</a>
                     {% endif %}
                     <a href="{% url 'account_logout' %}" class="bg-blue-700 hover:bg-blue-800 px-4 py-2 rounded-md">Logout</a>
                 {% else %}

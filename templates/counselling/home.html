@@ -3,40 +3,64 @@
 {% block title %}Home - College Counselling Portal{% endblock %}
 
 {% block content %}
-<div class="max-w-7xl mx-auto">
+<div class="max-w-7xl mx-auto px-4 py-8">
     <!-- Hero Section -->
-    <div class="bg-blue-600 text-white rounded-lg shadow-xl p-8 mb-8">
+    <div class="bg-blue-600 text-white rounded-lg shadow-xl p-8 mb-12 text-center">
         <h1 class="text-4xl font-bold mb-4">Welcome to College Counselling Portal</h1>
-        <p class="text-xl mb-6">Your gateway to a successful academic future</p>
+        <p class="text-lg md:text-xl mb-6">Your gateway to a successful academic future</p>
+
         {% if not user.is_authenticated %}
-            <div class="flex space-x-4">
-                <a href="{% url 'account_login' %}" class="bg-white text-blue-600 hover:bg-blue-50 px-6 py-3 rounded-md font-semibold">Login</a>
-                <a href="{% url 'account_signup' %}" class="bg-blue-700 hover:bg-blue-800 px-6 py-3 rounded-md font-semibold">Sign Up</a>
+            <div class="flex flex-col md:flex-row justify-center space-y-3 md:space-y-0 md:space-x-4">
+                <a href="{% url 'account_login' %}" 
+                   class="bg-white text-blue-600 hover:bg-blue-50 px-6 py-3 rounded-md font-semibold shadow">
+                    Login
+                </a>
+                <a href="{% url 'account_signup' %}" 
+                   class="bg-blue-700 hover:bg-blue-800 px-6 py-3 rounded-md font-semibold shadow">
+                    Sign Up
+                </a>
             </div>
         {% else %}
-            <a href="{% url 'dashboard' %}" class="bg-blue-700 hover:bg-blue-800 px-6 py-3 rounded-md font-semibold">Go to Dashboard</a>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 text-center">
+                <a href="{% url 'create_profile' %}" class="bg-blue-700 hover:bg-blue-800 px-6 py-3 rounded-md font-semibold shadow text-white">
+                    Create Profile
+                </a>
+                <a href="{% url 'branch_preference' %}" class="bg-green-600 hover:bg-green-700 px-6 py-3 rounded-md font-semibold shadow text-white">
+                    Select Branch Preferences
+                </a>
+                <a href="{% url 'branch_acceptance' %}" class="bg-yellow-500 hover:bg-yellow-600 px-6 py-3 rounded-md font-semibold shadow text-white">
+                    Accept / Request Re-assessment
+                </a>
+                <a href="{% url 'fee_payment' %}" class="bg-purple-600 hover:bg-purple-700 px-6 py-3 rounded-md font-semibold shadow text-white">
+                    Fee Procedure
+                </a>
+
+                {% if student and student.payment_verified and student.offer_letter_generated %}
+                    <a href="{% url 'download_offer_letter' %}" class="bg-indigo-600 hover:bg-indigo-700 px-6 py-3 rounded-md font-semibold shadow text-white">
+                        Download Offer Letter
+                    </a>
+                {% endif %}
+            </div>
         {% endif %}
     </div>
 
     <!-- Features Section -->
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-        <div class="bg-white p-6 rounded-lg shadow-md">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
+        <div class="bg-white p-6 rounded-lg shadow hover:shadow-lg transition">
             <div class="text-blue-600 text-4xl mb-4">
                 <i class="fas fa-user-graduate"></i>
             </div>
             <h2 class="text-xl font-semibold mb-2">Student Registration</h2>
-            <p class="text-gray-600">Create your profile, enter your academic details, and select your preferred branches.</p>
+            <p class="text-gray-600">Complete your profile with personal and academic details.</p>
         </div>
-        
-        <div class="bg-white p-6 rounded-lg shadow-md">
+        <div class="bg-white p-6 rounded-lg shadow hover:shadow-lg transition">
             <div class="text-blue-600 text-4xl mb-4">
                 <i class="fas fa-university"></i>
             </div>
             <h2 class="text-xl font-semibold mb-2">Branch Allotment</h2>
-            <p class="text-gray-600">Get allotted to your preferred branch based on your academic performance.</p>
+            <p class="text-gray-600">Get allotted to your preferred branch based on merit.</p>
         </div>
-        
-        <div class="bg-white p-6 rounded-lg shadow-md">
+        <div class="bg-white p-6 rounded-lg shadow hover:shadow-lg transition">
             <div class="text-blue-600 text-4xl mb-4">
                 <i class="fas fa-file-alt"></i>
             </div>
@@ -46,12 +70,11 @@
     </div>
 
     <!-- Available Branches Section -->
-    <div class="bg-white p-6 rounded-lg shadow-md mb-12">
+    <div class="bg-white p-6 rounded-lg shadow-md mb-16">
         <h2 class="text-2xl font-bold mb-4">Available Branches</h2>
-        
         {% if branches %}
             <div class="overflow-x-auto">
-                <table class="min-w-full bg-white">
+                <table class="min-w-full border border-gray-200 rounded-lg">
                     <thead class="bg-gray-100">
                         <tr>
                             <th class="py-3 px-4 text-left">Branch Name</th>
@@ -75,66 +98,56 @@
         {% endif %}
     </div>
 
-    <!-- Process Steps -->
+    <!-- Admission Process Section -->
     <div class="mb-12">
-        <h2 class="text-2xl font-bold mb-6">Admission Process</h2>
-        
+        <h2 class="text-2xl font-bold mb-8 text-center">Admission Process</h2>
         <div class="relative">
-            <!-- Progress Line -->
+            <!-- Vertical line (timeline) -->
             <div class="hidden md:block absolute left-1/2 transform -translate-x-1/2 h-full w-1 bg-blue-200"></div>
-            
-            <!-- Steps -->
-            <div class="space-y-12">
-                <!-- Step 1 -->
-                <div class="flex flex-col md:flex-row items-center">
-                    <div class="md:w-1/2 md:pr-8 mb-4 md:mb-0 text-right">
-                        <h3 class="text-xl font-semibold text-blue-600">Step 1: Registration</h3>
-                        <p class="text-gray-600">Create your account and complete your profile with personal and academic details.</p>
+
+            {% if steps %}
+                {% for step in steps %}
+                    <div class="flex flex-col md:flex-row items-center mb-12 relative">
+                        {% if forloop.counter|divisibleby:"2" %}
+                            <!-- Right side -->
+                            <div class="md:w-1/2 md:pr-8"></div>
+                            <div class="md:w-8 md:h-8 bg-blue-500 rounded-full flex items-center justify-center text-white font-bold z-10">
+                                {{ step.num }}
+                            </div>
+                            <div class="md:w-1/2 md:pl-8 mt-4 md:mt-0">
+                                <h3 class="text-lg font-semibold text-blue-600">{{ step.title }}</h3>
+                                <p class="text-gray-600">{{ step.desc }}</p>
+                                {% if step.url %}
+                                    {% if step.url == 'download_offer_letter' and student and student.payment_verified and student.offer_letter_generated %}
+                                        <a href="{% url step.url %}" class="mt-2 inline-block bg-indigo-600 text-white px-4 py-1 rounded hover:bg-indigo-700">Go</a>
+                                    {% elif step.url != 'download_offer_letter' %}
+                                        <a href="{% url step.url %}" class="mt-2 inline-block bg-blue-600 text-white px-4 py-1 rounded hover:bg-blue-700">Go</a>
+                                    {% endif %}
+                                {% endif %}
+                            </div>
+                        {% else %}
+                            <!-- Left side -->
+                            <div class="md:w-1/2 md:pr-8 text-right">
+                                <h3 class="text-lg font-semibold text-blue-600">{{ step.title }}</h3>
+                                <p class="text-gray-600">{{ step.desc }}</p>
+                                {% if step.url %}
+                                    {% if step.url == 'download_offer_letter' and student and student.payment_verified and student.offer_letter_generated %}
+                                        <a href="{% url step.url %}" class="mt-2 inline-block bg-indigo-600 text-white px-4 py-1 rounded hover:bg-indigo-700">Go</a>
+                                    {% elif step.url != 'download_offer_letter' %}
+                                        <a href="{% url step.url %}" class="mt-2 inline-block bg-blue-600 text-white px-4 py-1 rounded hover:bg-blue-700">Go</a>
+                                    {% endif %}
+                                {% endif %}
+                            </div>
+                            <div class="md:w-8 md:h-8 bg-blue-500 rounded-full flex items-center justify-center text-white font-bold z-10">
+                                {{ step.num }}
+                            </div>
+                            <div class="md:w-1/2 md:pl-8"></div>
+                        {% endif %}
                     </div>
-                    <div class="md:w-8 md:h-8 bg-blue-500 rounded-full z-10 flex items-center justify-center text-white font-bold">1</div>
-                    <div class="md:w-1/2 md:pl-8"></div>
-                </div>
-                
-                <!-- Step 2 -->
-                <div class="flex flex-col md:flex-row items-center">
-                    <div class="md:w-1/2 md:pr-8"></div>
-                    <div class="md:w-8 md:h-8 bg-blue-500 rounded-full z-10 flex items-center justify-center text-white font-bold">2</div>
-                    <div class="md:w-1/2 md:pl-8 mb-4 md:mb-0">
-                        <h3 class="text-xl font-semibold text-blue-600">Step 2: Branch Selection</h3>
-                        <p class="text-gray-600">Select your preferred branches in order of preference.</p>
-                    </div>
-                </div>
-                
-                <!-- Step 3 -->
-                <div class="flex flex-col md:flex-row items-center">
-                    <div class="md:w-1/2 md:pr-8 mb-4 md:mb-0 text-right">
-                        <h3 class="text-xl font-semibold text-blue-600">Step 3: Branch Allotment</h3>
-                        <p class="text-gray-600">Get allotted to a branch based on your academic performance and preferences.</p>
-                    </div>
-                    <div class="md:w-8 md:h-8 bg-blue-500 rounded-full z-10 flex items-center justify-center text-white font-bold">3</div>
-                    <div class="md:w-1/2 md:pl-8"></div>
-                </div>
-                
-                <!-- Step 4 -->
-                <div class="flex flex-col md:flex-row items-center">
-                    <div class="md:w-1/2 md:pr-8"></div>
-                    <div class="md:w-8 md:h-8 bg-blue-500 rounded-full z-10 flex items-center justify-center text-white font-bold">4</div>
-                    <div class="md:w-1/2 md:pl-8 mb-4 md:mb-0">
-                        <h3 class="text-xl font-semibold text-blue-600">Step 4: Fee Payment</h3>
-                        <p class="text-gray-600">Upload your payment receipt after accepting your branch allotment.</p>
-                    </div>
-                </div>
-                
-                <!-- Step 5 -->
-                <div class="flex flex-col md:flex-row items-center">
-                    <div class="md:w-1/2 md:pr-8 mb-4 md:mb-0 text-right">
-                        <h3 class="text-xl font-semibold text-blue-600">Step 5: Offer Letter</h3>
-                        <p class="text-gray-600">Download your offer letter after payment verification.</p>
-                    </div>
-                    <div class="md:w-8 md:h-8 bg-blue-500 rounded-full z-10 flex items-center justify-center text-white font-bold">5</div>
-                    <div class="md:w-1/2 md:pl-8"></div>
-                </div>
-            </div>
+                {% endfor %}
+            {% else %}
+                <p class="text-gray-600 text-center">Admission steps will be updated soon.</p>
+            {% endif %}
         </div>
     </div>
 </div>

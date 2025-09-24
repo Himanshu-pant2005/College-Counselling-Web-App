@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from .models import Student
-from .forms import StudentProfileForm, BranchPreferenceForm
+from .forms import CreateProfileForm, BranchPreferenceForm, PaymentReceiptForm
 from counselling.models import SeatMatrix
 from django.http import HttpResponse
 from reportlab.pdfgen import canvas
@@ -11,54 +11,69 @@ from io import BytesIO
 import os
 
 @login_required
-def dashboard(request):
-    try:
-        student = Student.objects.get(user=request.user)
-        context = {
-            'student': student,
-        }
-        return render(request, 'students/dashboard.html', context)
-    except Student.DoesNotExist:
-        return redirect('profile_form')
+def home(request):
+    student = None
+    if request.user.is_authenticated:
+        try:
+            student = Student.objects.get(user=request.user)
+        except Student.DoesNotExist:
+            student = None
+    branches = SeatMatrix.objects.all()
+    steps = [
+        {'num': 1, 'title': 'Registration', 'desc': 'Complete your profile.', 'url': 'create_profile'},
+        {'num': 2, 'title': 'Branch Selection', 'desc': 'Select branch preferences.', 'url': 'branch_preference'},
+        {'num': 3, 'title': 'Branch Allotment', 'desc': 'Accept or request reassignment.', 'url': 'branch_acceptance'},
+        {'num': 4, 'title': 'Fee Payment', 'desc': 'Upload payment receipt.', 'url': 'fee_payment'},
+        {'num': 5, 'title': 'Offer Letter', 'desc': 'Download after payment verification.', 'url': 'download_offer_letter'},
+    ]
 
+    context = {
+        'student': student,
+        'branches': branches,
+        'steps': steps,
+    }
+
+    return render(request, 'counselling/home.html', context)
 @login_required
-def profile_form(request):
+def create_profile(request):
     try:
         student = Student.objects.get(user=request.user)
+        if student.phone and student.dob:  
+            return redirect('branch_preference')
     except Student.DoesNotExist:
         student = Student(user=request.user)
-    
+
     if request.method == 'POST':
-        form = StudentProfileForm(request.POST, instance=student)
+        form = CreateProfileForm(request.POST, instance=student)
         if form.is_valid():
-            student = form.save(commit=False)
-            student.save()
-            messages.success(request, 'Personal details saved successfully!')
+            form.save()
+            messages.success(request, 'Profile created successfully!')
             return redirect('branch_preference')
     else:
-        form = StudentProfileForm(instance=student)
-    
-    return render(request, 'students/profile_form.html', {'form': form, 'step': 1})
+        form = CreateProfileForm(instance=student)
+
+    return render(request, 'students/create_profile.html', {'form': form})
+
 
 @login_required
 def branch_preference(request):
     try:
         student = Student.objects.get(user=request.user)
     except Student.DoesNotExist:
-        return redirect('profile_form')
-    
+        return redirect('create_profile')
+
     if request.method == 'POST':
         form = BranchPreferenceForm(request.POST, instance=student)
         if form.is_valid():
             student = form.save(commit=False)
             student.profile_completed = True
             student.save()
-            messages.success(request, 'Branch preferences saved successfully!')
-            return redirect('dashboard')
+            messages.success(request, 'Marks and preferences saved successfully!')
+            return redirect('branch_acceptance')
     else:
         form = BranchPreferenceForm(instance=student)
-    
-    return render(request, 'students/branch_preference.html', {'form': form, 'step': 2})
+
+    return render(request, 'students/branch_preference.html', {'form': form})
 
 @login_required
 def branch_acceptance(request):
@@ -69,7 +84,7 @@ def branch_acceptance(request):
     
     if not student.allotted_branch:
         messages.error(request, 'No branch has been allotted to you yet.')
-        return redirect('dashboard')
+        return redirect('home')
     
     if request.method == 'POST':
         action = request.POST.get('action')

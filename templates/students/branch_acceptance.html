@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="max-w-3xl mx-auto bg-white p-6 rounded-lg shadow-md mt-10 text-center">
+  <h2 class="text-2xl font-semibold mb-6">Branch Allotment</h2>
+
+  {% if allotted_branch %}
+    <p class="text-lg mb-4">You have been allotted the branch: <span class="font-bold">{{ allotted_branch }}</span></p>
+    
+    {% if not branch_accepted %}
+      <form method="POST" class="flex justify-center gap-4 mt-4">
+        {% csrf_token %}
+        <button type="submit" name="action" value="accept" class="bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700">Accept Branch</button>
+        <button type="submit" name="action" value="reassign" class="bg-yellow-500 text-white px-6 py-2 rounded hover:bg-yellow-600">Request Re-assignment</button>
+      </form>
+    {% else %}
+      <p class="text-green-600 mt-4 font-medium">You have already accepted this branch.</p>
+    {% endif %}
+
+  {% else %}
+    <p class="text-red-600 font-medium">No branch allotted yet. Please wait for admin allotment.</p>
+  {% endif %}
+</div>
+{% endblock %}

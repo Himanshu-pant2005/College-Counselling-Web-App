@@ -10,7 +10,7 @@ SECRET_KEY = 'django-insecure-h7d3w9y8e7r6t5r4e3w2q1w2e3r4t5y6u7i8o9p0'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["127.0.0.1", "localhost"]
 
 # Application definition
 INSTALLED_APPS = [
@@ -140,7 +140,7 @@ SOCIALACCOUNT_PROVIDERS = {
 }
 
 # Login/Logout URLs
-LOGIN_REDIRECT_URL = '/dashboard/'
+LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
 
 # Crispy Forms

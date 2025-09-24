@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block title %}Allot Branch - Admin{% endblock %}
+
+{% block content %}
+<div class="max-w-3xl mx-auto px-4 py-8">
+    <h1 class="text-2xl font-bold mb-6">Allot Branch to {{ student.user.first_name }} {{ student.user.last_name }}</h1>
+
+    <form method="POST">
+        {% csrf_token %}
+        <div class="mb-4">
+            <label for="branch" class="block font-semibold mb-2">Select Branch</label>
+            <select name="branch" id="branch" class="border p-2 rounded w-full">
+                <option value="">-- Select a Branch --</option>
+                {% for seat in seat_matrix %}
+                    <option value="{{ seat.branch_name }}" {% if seat.branch_name == student.allotted_branch %}selected{% endif %}>
+                        {{ seat.branch_name }} (Available: {{ seat.total_seats|add:"-":seat.filled_seats }})
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+            Allot Branch
+        </button>
+    </form>
+
+    {% if messages %}
+        <div class="mt-4">
+            {% for message in messages %}
+                <p class="text-{{ message.tags }}">{{ message }}</p>
+            {% endfor %}
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
