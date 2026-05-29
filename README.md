@@ -1,104 +1,36 @@
-# College Counselling Web Application
+This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
-A complete Django-based College Counselling Web Application with student registration, branch allotment, fee payment, and offer letter generation.
+## Getting Started
 
-## Features
+First, run the development server:
 
-- **Authentication System**
-  - Student & admin sign-up/login
-  - Email & password login
-  - Google OAuth2 integration
-  - Email verification
-
-- **Student Workflow**
-  - Profile form with personal and academic details
-  - Branch preference selection
-  - Branch allotment and acceptance
-  - Fee payment with receipt upload
-  - Offer letter generation and download
-
-- **Admin Workflow**
-  - Seat matrix management
-  - Student sorting by marks
-  - Branch allotment
-  - Payment verification
-  - Offer letter generation
-
-- **Email Notifications**
-  - Account verification
-  - Branch allotment
-  - Branch acceptance
-  - Receipt verification
-  - Offer letter availability
-
-## Setup Instructions
-
-1. **Clone the repository**
-
-2. **Install dependencies**
-   ```
-   pip install -r requirements.txt
-   ```
-
-3. **Apply migrations**
-   ```
-   python manage.py migrate
-   ```
-
-4. **Create a superuser (admin)**
-   ```
-   python manage.py createsuperuser
-   ```
-
-5. **Run the development server**
-   ```
-   python manage.py runserver
-   ```
-
-6. **Access the application**
-   - Main site: http://127.0.0.1:8000/
-   - Admin site: http://127.0.0.1:8000/admin/
-
-## Google OAuth2 Setup
-
-1. Create a project in the [Google Developer Console](https://console.developers.google.com/)
-2. Enable the Google+ API
-3. Create OAuth2 credentials (Web application type)
-4. Add authorized redirect URIs:
-   - http://127.0.0.1:8000/accounts/google/login/callback/
-5. Add your Client ID and Secret to the Django admin:
-   - Go to http://127.0.0.1:8000/admin/
-   - Navigate to Sites and add your domain
-   - Navigate to Social Applications
-   - Add a new application with your Google credentials
-
-## Email Configuration
-
-For development, the application uses the console email backend. For production, update the settings.py file with your SMTP configuration:
-
-```python
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'your-email@gmail.com'
-EMAIL_HOST_PASSWORD = 'your-app-password'
+```bash
+npm run dev
+# or
+yarn dev
+# or
+pnpm dev
+# or
+bun dev
 ```
 
-## Technologies Used
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-- Django 4.2.7
-- django-allauth for authentication
-- TailwindCSS for UI
-- ReportLab for PDF generation
-- SQLite database (can be switched to PostgreSQL)
+You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
 
-## Project Structure
+This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
-- `college_counselling/` - Main project folder
-  - `students/` - Student app with profile, branch selection, and offer letter
-  - `admins/` - Admin app with seat matrix and verification functionality
-  - `counselling/` - Core app with home page and seat matrix models
-  - `templates/` - HTML templates with TailwindCSS
-  - `static/` - Static files (CSS, JS)
-  - `media/` - Uploaded files (receipts, etc.)
+## Learn More
+
+To learn more about Next.js, take a look at the following resources:
+
+- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
+- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+
+You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+
+## Deploy on Vercel
+
+The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+
+Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
