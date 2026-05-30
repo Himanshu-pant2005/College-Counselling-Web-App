@@ -1,3 +1,4 @@
+'use client';
 export default function AboutPage() {
   return (
     <div className="about-container container animate-fade-in">

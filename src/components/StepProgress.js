@@ -1,6 +1,6 @@
 'use client';
 
-export default function StepProgress({ currentStep = 1 }) {
+export default function StepProgress({ currentStep = 1, isFinished = false }) {
   const steps = [
     { num: 1, label: 'Profile' },
     { num: 2, label: 'Academic Marks' },
@@ -14,15 +14,15 @@ export default function StepProgress({ currentStep = 1 }) {
       <div className="progress-bar-track">
         <div
           className="progress-bar-fill"
-          style={{ width: `${((currentStep - 1) / (steps.length - 1)) * 100}%` }}
+          style={{ width: isFinished ? '100%' : `${((currentStep - 1) / (steps.length - 1)) * 100}%` }}
         />
       </div>
 
       <div className="progress-steps-row">
         {steps.map((step) => {
-          const isCompleted = step.num < currentStep;
-          const isActive = step.num === currentStep;
-          const isPending = step.num > currentStep;
+          const isCompleted = isFinished || step.num < currentStep;
+          const isActive = !isFinished && step.num === currentStep;
+          const isPending = !isFinished && step.num > currentStep;
 
           let stepClass = 'step-node';
           if (isCompleted) stepClass += ' completed';
@@ -104,18 +104,13 @@ export default function StepProgress({ currentStep = 1 }) {
           white-space: nowrap;
           transition: var(--transition-normal);
         }
-        
-        /* State Colors */
         .step-node.completed .step-circle {
           background: var(--success);
           border-color: var(--success);
           color: white;
           box-shadow: 0 0 15px var(--success-glow);
         }
-        .step-node.completed .step-label {
-          color: var(--success);
-        }
-
+        .step-node.completed .step-label { color: var(--success); }
         .step-node.active .step-circle {
           background-color: var(--bg-primary);
           border-color: var(--primary);
@@ -123,36 +118,15 @@ export default function StepProgress({ currentStep = 1 }) {
           box-shadow: 0 0 15px var(--primary-glow);
           transform: scale(1.1);
         }
-        .step-node.active .step-label {
-          color: var(--primary);
-          font-weight: 700;
-        }
-
-        .step-node.pending .step-circle {
-          background-color: var(--bg-secondary);
-        }
+        .step-node.active .step-label { color: var(--primary); font-weight: 700; }
+        .step-node.pending .step-circle { background-color: var(--bg-secondary); }
 
         @media (max-width: 600px) {
-          .progress-bar-track {
-            display: none;
-          }
-          .progress-steps-row {
-            flex-direction: column;
-            gap: 16px;
-            align-items: flex-start;
-          }
-          .step-node {
-            flex-direction: row;
-            gap: 16px;
-            width: 100%;
-          }
-          .step-label {
-            margin-top: 0;
-            font-size: 0.95rem;
-          }
-          .progress-container {
-            padding: 16px 20px;
-          }
+          .progress-bar-track { display: none; }
+          .progress-steps-row { flex-direction: column; gap: 16px; align-items: flex-start; }
+          .step-node { flex-direction: row; gap: 16px; width: 100%; }
+          .step-label { margin-top: 0; font-size: 0.95rem; }
+          .progress-container { padding: 16px 20px; }
         }
       `}</style>
     </div>

@@ -26,6 +26,14 @@ export async function POST(request) {
 
       // If branch remains the same, do nothing
       if (prevBranch === branchCode) {
+        const updated = await tx.student.update({
+          where: { id: studentId },
+          data: {
+            branchStatus: 'pending',
+            offerGenerated: false,
+            paymentVerified: false,
+          },
+        });
         return student;
       }
 

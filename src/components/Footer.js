@@ -1,3 +1,4 @@
+'use client';
 export default function Footer() {
   return (
     <footer className="footer">
@@ -16,7 +17,6 @@ export default function Footer() {
               <li><a href="/">Home</a></li>
               <li><a href="/about">About</a></li>
               <li><a href="/contact">Contact</a></li>
-              <li><a href="/admin-portal/login">Admin Desk</a></li>
             </ul>
           </div>
           

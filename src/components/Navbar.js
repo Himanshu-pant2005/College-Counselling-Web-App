@@ -11,7 +11,7 @@ export default function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const isActive = (path) => pathname === path;
-
+  if (pathname?.startsWith('/admin-portal')) return null;
   // Don't show regular Navbar on portal/admin layouts if they have their own sidebars
   // But since we want to keep it simple, we can display Navbar everywhere, or exclude it on /student/* and /admin-portal/* pages if they have their own custom navigation.
   // Actually, keeping the landing page navbar separate or keeping a global top navbar with custom portal sidebars is very neat. Let's make it look clean everywhere.

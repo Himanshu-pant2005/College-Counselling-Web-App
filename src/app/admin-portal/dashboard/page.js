@@ -42,9 +42,31 @@ export default function AdminDashboard() {
     }
   };
 
-  useEffect(() => {
-    loadData();
-  }, []);
+useEffect(() => {
+  let cancelled = false;
+
+  const fetchData = async () => {
+    try {
+      const [studRes, seatRes] = await Promise.all([
+        fetch('/api/admin/students'),
+        fetch('/api/admin/seat-matrix'),
+      ]);
+      if (!cancelled && studRes.ok && seatRes.ok) {
+        const studData = await studRes.json();
+        const seatData = await seatRes.json();
+        setStudents(studData.students);
+        setBranches(seatData.seatMatrix);
+      }
+    } catch (err) {
+      console.error(err);
+    } finally {
+      if (!cancelled) setLoading(false);
+    }
+  };
+
+  fetchData();
+  return () => { cancelled = true; };
+}, []);
 
   const openAllotmentModal = (student) => {
     setSelectedStudent(student);
@@ -254,12 +276,14 @@ export default function AdminDashboard() {
                   <td>{getStatusBadge(stud)}</td>
                   <td style={{ textAlign: 'right' }}>
                     <div className="actions-cell">
-                      <button
-                        onClick={() => openAllotmentModal(stud)}
-                        className="btn btn-secondary btn-sm"
-                      >
-                        Allot Branch
-                      </button>
+                      {!stud.paymentVerified && (
+                        <button
+                          onClick={() => openAllotmentModal(stud)}
+                          className="btn btn-secondary btn-sm"
+                        >
+                          {stud.allottedBranch ? 'Re-allot' : 'Allot Branch'}
+                        </button>
+                      )}
                       {stud.paymentReceipt && !stud.paymentVerified && (
                         <button
                           onClick={() => openVerifyModal(stud)}

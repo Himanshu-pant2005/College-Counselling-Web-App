@@ -50,7 +50,7 @@ export default function Sidebar({ student }) {
       num: 5,
       title: 'Offer Letter',
       path: '/student/offer-letter',
-      status: isPaymentVerified ? 'pending' : 'locked',
+      status: student?.offerGenerated ? 'completed' : isPaymentVerified ? 'pending' : 'locked',
     },
   ];
 

@@ -2,14 +2,12 @@ import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { requireStudent } from '@/lib/auth';
 
-// GET student profile
 export async function GET() {
   try {
     const session = await requireStudent();
-    const userId = session.user.id;
 
     const student = await prisma.student.findUnique({
-      where: { userId },
+      where: { userId: session.user.id },
       include: { user: true },
     });
 
@@ -19,12 +17,10 @@ export async function GET() {
 
     return NextResponse.json({ student });
   } catch (error) {
-    console.error('GET Profile Error:', error);
-    return NextResponse.json({ error: error.message || 'Internal server error' }, { status: 401 });
+    return NextResponse.json({ error: error.message || 'Unauthorized' }, { status: 401 });
   }
 }
 
-// POST create/update profile details
 export async function POST(request) {
   try {
     const session = await requireStudent();
@@ -33,33 +29,26 @@ export async function POST(request) {
     const { name, phone, dob } = await request.json();
 
     if (!name || !phone || !dob) {
-      return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
+      return NextResponse.json({ error: 'All fields are required' }, { status: 400 });
     }
 
-    // Update User name and Student profile in a transaction
-    const student = await prisma.$transaction(async (tx) => {
-      // 1. Update user details
+    await prisma.$transaction(async (tx) => {
+      // name, phone, dob all live on User
       await tx.user.update({
         where: { id: userId },
-        data: { name },
+        data: { name, phone, dob },
       });
 
-      // 2. Update student profile
-      const updatedStudent = await tx.student.update({
+      // just flip profileCompleted on Student
+      await tx.student.update({
         where: { userId },
-        data: {
-          phone,
-          dob,
-          profileCompleted: true,
-        },
+        data: { profileCompleted: true },
       });
-
-      return updatedStudent;
     });
 
-    return NextResponse.json({ message: 'Profile updated successfully', student });
+    return NextResponse.json({ message: 'Profile updated successfully' });
   } catch (error) {
     console.error('POST Profile Error:', error);
-    return NextResponse.json({ error: error.message || 'Internal server error' }, { status: 401 });
+    return NextResponse.json({ error: error.message || 'Internal server error' }, { status: 500 });
   }
 }

@@ -190,7 +190,7 @@ export default function OfferLetterPage() {
 
   return (
     <div className="offer-letter-container animate-slide-up">
-      <StepProgress currentStep={5} />
+      <StepProgress currentStep={5} isFinished={true} />
 
       <div className="glass-card offer-card-wrapper">
         <div className="offer-card-header">
